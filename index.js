@@ -22,14 +22,41 @@ function authenticate(req, res, next) {
   });
 }
 
-// simple login endpoint (hardcoded user)
-app.post('/login', (req, res) => {
+// create users table if not exists
+db.run(`CREATE TABLE IF NOT EXISTS users (
+  username TEXT PRIMARY KEY,
+  password TEXT NOT NULL
+)`);
+
+// sign up endpoint
+app.post('/signup', async (req, res) => {
   const { username, password } = req.body;
-  if (username === 'admin' && password === 'password') {
+  if (!username || !password) return res.status(400).json({ error: 'username and password required' });
+  try {
+    // simple insertion, plaintext password for demo
+    await db.run('INSERT INTO users (username, password) VALUES (?,?)', [username, password]);
+    res.status(201).json({ success: true });
+  } catch (err) {
+    if (err.message.includes('UNIQUE')) {
+      res.status(409).json({ error: 'User already exists' });
+    } else {
+      res.status(500).json({ error: err.message });
+    }
+  }
+});
+
+// login uses users table
+app.post('/login', async (req, res) => {
+  const { username, password } = req.body;
+  if (!username || !password) return res.status(400).json({ error: 'username and password required' });
+  try {
+    const user = await db.get('SELECT * FROM users WHERE username = ? AND password = ?', [username, password]);
+    if (!user) return res.status(401).json({ error: 'Invalid credentials' });
     const token = jwt.sign({ username }, SECRET, { expiresIn: '1h' });
     return res.json({ token });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
   }
-  res.status(401).json({ error: 'Invalid credentials' });
 });
 
 // protect all /api/books routes
