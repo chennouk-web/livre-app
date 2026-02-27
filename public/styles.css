@@ -1,6 +1,14 @@
 :root{--accent:#2b7cff;--bg:#f7f9fc}
 *{box-sizing:border-box}
-body{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial;line-height:1.4;background:var(--bg);padding:20px}
+body{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial;line-height:1.4;background:#000 url('') repeat; padding:20px;
+  /* global starry pattern */
+  background-image:
+    radial-gradient(circle, #fff 1px, transparent 1px),
+    radial-gradient(circle, #fff 1px, transparent 1px);
+  background-size: 10px 10px;
+  background-position: 0 0, 5px 5px;
+  color: #fff;
+}
 
 /* login page styles */
 body.login {
