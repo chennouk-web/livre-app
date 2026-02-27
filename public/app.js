@@ -1,10 +1,24 @@
+// redirect unauthenticated users to login
+if (!localStorage.getItem('token')) {
+  window.location.href = '/login.html';
+}
+
 async function api(path, method = 'GET', body) {
   const opts = { method, headers: {} };
+  const token = localStorage.getItem('token');
+  if (token) {
+    opts.headers['Authorization'] = 'Bearer ' + token;
+  }
   if (body) {
     opts.headers['Content-Type'] = 'application/json';
     opts.body = JSON.stringify(body);
   }
   const res = await fetch(path, opts);
+  if (res.status === 401) {
+    // not authenticated, redirect login
+    window.location.href = '/login.html';
+    throw new Error('Unauthorized');
+  }
   if (!res.ok) throw new Error(await res.text());
   return res.status === 204 ? null : res.json();
 }
@@ -105,5 +119,14 @@ listEl.addEventListener('click', async (e) => {
     }
   }
 });
+
+// logout support
+const logoutBtn = document.getElementById('logout');
+if (logoutBtn) {
+  logoutBtn.addEventListener('click', () => {
+    localStorage.removeItem('token');
+    window.location.href = '/login.html';
+  });
+}
 
 load();

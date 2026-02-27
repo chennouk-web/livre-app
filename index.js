@@ -1,10 +1,39 @@
 const express = require('express');
 const path = require('path');
 const db = require('./db');
+const jwt = require('jsonwebtoken');
 
 const app = express();
 app.use(express.json());
 app.use(express.static(path.join(__dirname, 'public')));
+
+const SECRET = process.env.JWT_SECRET || 'supersecret';
+
+function authenticate(req, res, next) {
+  const auth = req.headers.authorization;
+  if (!auth) return res.status(401).json({ error: 'Missing token' });
+  const parts = auth.split(' ');
+  if (parts.length !== 2 || parts[0] !== 'Bearer') 
+    return res.status(401).json({ error: 'Invalid token format' });
+  jwt.verify(parts[1], SECRET, (err, decoded) => {
+    if (err) return res.status(401).json({ error: 'Invalid token' });
+    req.user = decoded;
+    next();
+  });
+}
+
+// simple login endpoint (hardcoded user)
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  if (username === 'admin' && password === 'password') {
+    const token = jwt.sign({ username }, SECRET, { expiresIn: '1h' });
+    return res.json({ token });
+  }
+  res.status(401).json({ error: 'Invalid credentials' });
+});
+
+// protect all /api/books routes
+app.use('/api/books', authenticate);
 
 // List all books
 app.get('/api/books', async (req, res) => {
