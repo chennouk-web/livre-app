@@ -26,6 +26,20 @@ body.login .container {
   box-shadow: 0 8px 24px rgba(0,0,0,0.12);
 }
 
+/* login button: a little darker purple */
+body.login .actions .login-btn {
+  background: #6a2fb0;
+  color: #fff;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  box-shadow: 0 4px 12px rgba(106,47,176,0.18);
+}
+body.login .actions .login-btn:hover {
+  background: #59279a;
+}
+
 .container{max-width:880px;margin:0 auto;background:#fff;padding:20px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
 h1,h2{margin:0 0 12px}
 form .row{display:flex;gap:12px;align-items:center;margin-bottom:10px}
