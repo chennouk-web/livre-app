@@ -9,13 +9,22 @@ body.login {
   align-items: center;
   min-height: 100vh;
   padding: 0;
-  background: var(--bg);
+  /* starry space background */
+  background: #000;
+  background-image:
+    radial-gradient(circle, #fff 1px, transparent 1px),
+    radial-gradient(circle, #fff 1px, transparent 1px);
+  background-size: 10px 10px;
+  background-position: 0 0, 5px 5px;
+  color: #fff;
 }
 body.login .container {
   max-width: 400px;
   width: 100%;
   margin: 0 auto;
   padding: 30px;
+  background: rgba(255,255,255,0.1);
+  border-radius: 8px;
 }
 
 .container{max-width:880px;margin:0 auto;background:#fff;padding:20px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
