@@ -1,6 +1,23 @@
 :root{--accent:#2b7cff;--bg:#f7f9fc}
 *{box-sizing:border-box}
 body{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial;line-height:1.4;background:var(--bg);padding:20px}
+
+/* login page styles */
+body.login {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 0;
+  background: var(--bg);
+}
+body.login .container {
+  max-width: 400px;
+  width: 100%;
+  margin: 0 auto;
+  padding: 30px;
+}
+
 .container{max-width:880px;margin:0 auto;background:#fff;padding:20px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
 h1,h2{margin:0 0 12px}
 form .row{display:flex;gap:12px;align-items:center;margin-bottom:10px}
