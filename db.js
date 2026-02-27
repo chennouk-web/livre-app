@@ -2,7 +2,9 @@ const sqlite3 = require('sqlite3').verbose();
 const fs = require('fs');
 const path = require('path');
 
-const dataDir = path.join(__dirname, 'data');
+// use a writable directory compatible with serverless environments (Vercel)
+// on Vercel the filesystem is read-only except /tmp which is ephemeral
+const dataDir = process.env.VERCEL ? '/tmp' : path.join(__dirname, 'data');
 if (!fs.existsSync(dataDir)) fs.mkdirSync(dataDir, { recursive: true });
 const dbFile = path.join(dataDir, 'books.db');
 
