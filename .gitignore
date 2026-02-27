@@ -1,0 +1,5 @@
+node_modules/
+data/books.db
+*.log
+npm-debug.log*
+.env

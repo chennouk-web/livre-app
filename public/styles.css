@@ -1,0 +1,19 @@
+:root{--accent:#2b7cff;--bg:#f7f9fc}
+*{box-sizing:border-box}
+body{font-family:system-ui,Segoe UI,Roboto,Helvetica,Arial;line-height:1.4;background:var(--bg);padding:20px}
+.container{max-width:880px;margin:0 auto;background:#fff;padding:20px;border-radius:8px;box-shadow:0 6px 18px rgba(0,0,0,0.06)}
+h1,h2{margin:0 0 12px}
+form .row{display:flex;gap:12px;align-items:center;margin-bottom:10px}
+form label{width:90px;font-weight:600}
+form input, form textarea{flex:1;padding:8px;border:1px solid #ddd;border-radius:4px}
+form textarea{min-height:60px}
+.actions{display:flex;gap:8px}
+.actions button{background:var(--accent);color:#fff;padding:8px 12px;border:none;border-radius:5px;cursor:pointer}
+#list{margin-top:14px}
+.book{padding:12px;border:1px solid #eee;border-radius:6px;margin-bottom:8px;background:#fafbff}
+.meta{margin-bottom:6px}
+.controls{margin-top:8px}
+.controls button{margin-right:8px;padding:6px 8px;border-radius:4px;border:1px solid #ccc;background:#fff;cursor:pointer}
+.year{color:#666;margin-left:6px}
+.desc{color:#333}
+.error{color:#b00020}
