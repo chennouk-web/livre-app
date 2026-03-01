@@ -20,6 +20,19 @@ db.serialize(() => {
   )`);
 });
 
+// ensure users table exists and seed default admin user
+db.serialize(() => {
+  db.run(`CREATE TABLE IF NOT EXISTS users (
+    username TEXT PRIMARY KEY,
+    password TEXT NOT NULL
+  )`);
+
+  const adminUser = process.env.ADMIN_USER || 'admin';
+  const adminPass = process.env.ADMIN_PASS || 'password';
+  // insert admin user if not present (plaintext password for demo)
+  db.run('INSERT OR IGNORE INTO users (username, password) VALUES (?, ?)', [adminUser, adminPass]);
+});
+
 function run(sql, params = []) {
   return new Promise((resolve, reject) => {
     db.run(sql, params, function (err) {
