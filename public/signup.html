@@ -25,9 +25,30 @@
       </form>
     </div>
     <script>
-      document.getElementById('signup-form').addEventListener('submit', (e) => {
+      document.getElementById('signup-form').addEventListener('submit', async (e) => {
         e.preventDefault();
-        alert('Sign up is not implemented. Use admin/password to sign in.');
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+        if (!username || !password) {
+          alert('Username and password are required');
+          return;
+        }
+        try {
+          const res = await fetch('/signup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ username, password })
+          });
+          if (!res.ok) {
+            const err = await res.json();
+            throw new Error(err.error || 'Sign up failed');
+          }
+          alert('Account created! Please log in.');
+          window.location.href = '/login.html';
+        } catch (err) {
+          alert('Sign up error: ' + err.message);
+          console.error(err);
+        }
       });
     </script>
   </body>
