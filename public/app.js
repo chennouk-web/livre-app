@@ -53,6 +53,27 @@ themeToggle.addEventListener('click', () => {
   themeToggle.textContent = isDark ? '☀️' : '🌙';
 });
 
+// ===== Parallax Effect =====
+const blobs = document.querySelectorAll('.blob');
+let mouseX = 0;
+let mouseY = 0;
+
+document.addEventListener('mousemove', (e) => {
+  mouseX = (e.clientX / window.innerWidth - 0.5) * 20;
+  mouseY = (e.clientY / window.innerHeight - 0.5) * 20;
+  
+  blobs.forEach((blob, index) => {
+    const offset = (index + 1) * 2;
+    blob.style.transform = `translate(calc(var(--tx, 0px) + ${mouseX * offset}px), calc(var(--ty, 0px) + ${mouseY * offset}px))`;
+  });
+});
+
+// Add scroll parallax for very subtle effect
+document.addEventListener('scroll', (e) => {
+  const scrollY = window.scrollY * 0.1;
+  document.querySelector('.gradient-bg').style.transform = `translateY(${scrollY}px)`;
+});
+
 // ===== Navigation =====
 navItems.forEach(item => {
   item.addEventListener('click', (e) => {
