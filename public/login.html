@@ -1,50 +1,61 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>LIVRE</title>
-    <link rel="stylesheet" href="/styles.css" />
-  </head>
-  <body class="login">
-    <div class="container">
-      <h1>Login</h1>
-      <form id="login-form">
-        <div class="row">
-          <label>Username</label>
-          <input id="username" required />
-        </div>
-        <div class="row">
-          <label>Password</label>
-          <input id="password" type="password" required />
-        </div>
-        <div class="actions">
-          <button type="submit" class="login-btn">Login</button>
-          <a href="/signup.html" class="btn-primary" style="background:#fff;color:#6a2fb0;margin-left:8px;box-shadow:none;border:1px solid #e0d6f6">Sign Up</a>
-        </div>
-      </form>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Login - Livre Library</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body class="login">
+  <div class="container">
+    <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 32px; gap: 8px;">
+      <span style="font-size: 32px;">📚</span>
+      <h1 style="margin: 0; font-size: 28px;">Livre</h1>
+    </div>
+    
+    <form id="login-form">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input id="username" type="text" placeholder="Enter your username" required />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input id="password" type="password" placeholder="Enter your password" required />
+      </div>
+      <div class="actions">
+        <button type="submit" class="login-btn">Sign In</button>
+      </div>
+    </form>
+
+    <div style="text-align: center; margin-top: 20px; color: #64748b; font-size: 14px;">
+      Don't have an account? <a href="/signup.html" style="color: #3b82f6; text-decoration: none; font-weight: 600;">Sign up</a>
     </div>
 
-    <script>
-      document.getElementById('login-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const username = document.getElementById('username').value.trim();
-        const password = document.getElementById('password').value;
-        try {
-          const res = await fetch('/login', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
-          });
-          if (!res.ok) throw new Error('Login failed');
-          const data = await res.json();
-          localStorage.setItem('token', data.token);
-          window.location.href = '/';
-        } catch (err) {
-          alert('Login error');
-          console.error(err);
-        }
-      });
-    </script>
-  </body>
+    <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid #e2e8f0; text-align: center; color: #64748b; font-size: 12px;">
+      <p><strong>Demo Account</strong><br>Username: <code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px;">admin</code><br>Password: <code style="background: #f1f5f9; padding: 2px 6px; border-radius: 4px;">password</code></p>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      try {
+        const res = await fetch('/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        if (!res.ok) throw new Error('Invalid credentials');
+        const data = await res.json();
+        localStorage.setItem('token', data.token);
+        window.location.href = '/';
+      } catch (err) {
+        alert('Login failed: ' + err.message);
+        console.error(err);
+      }
+    });
+  </script>
+</body>
 </html>

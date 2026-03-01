@@ -1,46 +1,208 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Livre Management</title>
-    <link rel="stylesheet" href="/styles.css" />
-  </head>
-  <body>
-    <div class="container">
-      <h1>Gestion des Livres</h1>
-      <div class="actions" style="margin-bottom:1rem;">
-        <button id="logout">Logout</button>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Livre Library - Dashboard</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+  <div class="app-container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-header">
+        <div class="logo">
+          <span class="logo-icon">📚</span>
+          <span class="logo-text">Livre</span>
+        </div>
+        <button class="sidebar-toggle" id="sidebarToggle">☰</button>
       </div>
+      
+      <nav class="sidebar-nav">
+        <a href="#dashboard" class="nav-item active" data-section="dashboard">
+          <span class="icon">📊</span>
+          <span class="label">Dashboard</span>
+        </a>
+        <a href="#books" class="nav-item" data-section="books">
+          <span class="icon">📖</span>
+          <span class="label">Books</span>
+        </a>
+        <a href="#borrowers" class="nav-item" data-section="borrowers">
+          <span class="icon">👥</span>
+          <span class="label">Borrowers</span>
+        </a>
+        <a href="#categories" class="nav-item" data-section="categories">
+          <span class="icon">🏷️</span>
+          <span class="label">Categories</span>
+        </a>
+        <a href="#reports" class="nav-item" data-section="reports">
+          <span class="icon">📈</span>
+          <span class="label">Reports</span>
+        </a>
+        <a href="#settings" class="nav-item" data-section="settings">
+          <span class="icon">⚙️</span>
+          <span class="label">Settings</span>
+        </a>
+      </nav>
 
-      <form id="book-form">
-        <input type="hidden" id="book-id" />
-        <div class="row">
-          <label>Title</label>
-          <input id="title" required />
-        </div>
-        <div class="row">
-          <label>Author</label>
-          <input id="author" />
-        </div>
-        <div class="row">
-          <label>Year</label>
-          <input id="year" type="number" />
-        </div>
-        <div class="row">
-          <label>Description</label>
-          <textarea id="description"></textarea>
-        </div>
-        <div class="actions">
-          <button type="submit">Save</button>
-          <button type="button" id="reset">Reset</button>
-        </div>
-      </form>
+      <div class="sidebar-footer">
+        <button id="themeToggle" class="theme-toggle">🌙</button>
+        <button id="logout" class="logout-btn">Logout</button>
+      </div>
+    </aside>
 
-      <h2>Books</h2>
-      <div id="list"></div>
-    </div>
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Top Navbar -->
+      <nav class="top-navbar">
+        <div class="navbar-left">
+          <input type="text" class="search-bar" placeholder="Search books..." />
+        </div>
+        <div class="navbar-right">
+          <button class="icon-btn" title="Notifications">🔔</button>
+          <div class="profile-dropdown">
+            <button class="profile-btn" id="profileBtn">👤</button>
+            <div class="dropdown-menu">
+              <a href="#profile">Profile</a>
+              <a href="#settings">Settings</a>
+              <hr />
+              <a href="#" id="logoutDropdown">Logout</a>
+            </div>
+          </div>
+        </div>
+      </nav>
 
-    <script src="/app.js"></script>
-  </body>
+      <!-- Content Area -->
+      <div class="content">
+        <!-- Dashboard Section -->
+        <section id="dashboard-section" class="section active">
+          <div class="section-header">
+            <h1>Dashboard</h1>
+            <p>Welcome back! Here's your library overview.</p>
+          </div>
+          <div class="stats-grid">
+            <div class="stat-card">
+              <span class="stat-icon">📚</span>
+              <div class="stat-content">
+                <span class="stat-label">Total Books</span>
+                <span class="stat-value" id="totalBooks">0</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <span class="stat-icon">👥</span>
+              <div class="stat-content">
+                <span class="stat-label">Borrowers</span>
+                <span class="stat-value">0</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <span class="stat-icon">📖</span>
+              <div class="stat-content">
+                <span class="stat-label">Categories</span>
+                <span class="stat-value">0</span>
+              </div>
+            </div>
+            <div class="stat-card">
+              <span class="stat-icon">✨</span>
+              <div class="stat-content">
+                <span class="stat-label">New This Month</span>
+                <span class="stat-value" id="newBooks">0</span>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Books Section -->
+        <section id="books-section" class="section">
+          <div class="section-header">
+            <h1>Books Library</h1>
+            <button class="btn btn-primary" id="addBookBtn">+ Add Book</button>
+          </div>
+
+          <!-- Add/Edit Book Form -->
+          <div class="card form-card" id="formCard" style="display: none;">
+            <form id="book-form">
+              <input type="hidden" id="book-id" />
+              <div class="form-group">
+                <label for="title">Book Title *</label>
+                <input type="text" id="title" placeholder="Enter book title" required />
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label for="author">Author</label>
+                  <input type="text" id="author" placeholder="Author name" />
+                </div>
+                <div class="form-group">
+                  <label for="year">Publication Year</label>
+                  <input type="number" id="year" placeholder="2024" />
+                </div>
+              </div>
+              <div class="form-group">
+                <label for="description">Description</label>
+                <textarea id="description" placeholder="Book description..." rows="4"></textarea>
+              </div>
+              <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Save Book</button>
+                <button type="button" class="btn btn-secondary" id="reset">Cancel</button>
+              </div>
+            </form>
+          </div>
+
+          <!-- Books List -->
+          <div id="list" class="books-grid">
+            <div class="empty-state">
+              <span class="empty-icon">📚</span>
+              <p>No books yet. Add your first book to get started!</p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Borrowers Section -->
+        <section id="borrowers-section" class="section">
+          <div class="section-header">
+            <h1>Borrowers</h1>
+          </div>
+          <div class="card">
+            <p style="text-align: center; color: #999; padding: 2rem;">Coming soon...</p>
+          </div>
+        </section>
+
+        <!-- Categories Section -->
+        <section id="categories-section" class="section">
+          <div class="section-header">
+            <h1>Categories</h1>
+          </div>
+          <div class="card">
+            <p style="text-align: center; color: #999; padding: 2rem;">Coming soon...</p>
+          </div>
+        </section>
+
+        <!-- Reports Section -->
+        <section id="reports-section" class="section">
+          <div class="section-header">
+            <h1>Reports</h1>
+          </div>
+          <div class="card">
+            <p style="text-align: center; color: #999; padding: 2rem;">Coming soon...</p>
+          </div>
+        </section>
+
+        <!-- Settings Section -->
+        <section id="settings-section" class="section">
+          <div class="section-header">
+            <h1>Settings</h1>
+          </div>
+          <div class="card">
+            <div class="settings-group">
+              <h3>Appearance</h3>
+              <p>Theme preferences are saved to your browser.</p>
+            </div>
+          </div>
+        </section>
+      </div>
+    </main>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
 </html>

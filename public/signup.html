@@ -1,55 +1,63 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width,initial-scale=1" />
-    <title>Sign Up - LIVRE</title>
-    <link rel="stylesheet" href="/styles.css" />
-  </head>
-  <body class="login">
-    <div class="container">
-      <h1>Create account</h1>
-      <form id="signup-form">
-        <div class="row">
-          <label>Username</label>
-          <input id="username" required />
-        </div>
-        <div class="row">
-          <label>Password</label>
-          <input id="password" type="password" required />
-        </div>
-        <div class="actions">
-          <button type="submit" class="btn-primary">Sign Up</button>
-          <a href="/login.html" class="btn-primary" style="background:#ccc;color:#222;box-shadow:none">Back to Sign In</a>
-        </div>
-      </form>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sign Up - Livre Library</title>
+  <link rel="stylesheet" href="/styles.css" />
+</head>
+<body class="login">
+  <div class="container">
+    <div style="display: flex; align-items: center; justify-content: center; margin-bottom: 32px; gap: 8px;">
+      <span style="font-size: 32px;">📚</span>
+      <h1 style="margin: 0; font-size: 28px;">Livre</h1>
     </div>
-    <script>
-      document.getElementById('signup-form').addEventListener('submit', async (e) => {
-        e.preventDefault();
-        const username = document.getElementById('username').value.trim();
-        const password = document.getElementById('password').value;
-        if (!username || !password) {
-          alert('Username and password are required');
-          return;
+    
+    <form id="signup-form">
+      <div class="form-group">
+        <label for="username">Username</label>
+        <input id="username" type="text" placeholder="Choose a username" required />
+      </div>
+      <div class="form-group">
+        <label for="password">Password</label>
+        <input id="password" type="password" placeholder="Enter a password" required />
+      </div>
+      <div class="actions">
+        <button type="submit" class="login-btn">Create Account</button>
+      </div>
+    </form>
+
+    <div style="text-align: center; margin-top: 20px; color: #64748b; font-size: 14px;">
+      Already have an account? <a href="/login.html" style="color: #3b82f6; text-decoration: none; font-weight: 600;">Sign in</a>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('signup-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      if (!username || !password) {
+        alert('Username and password are required');
+        return;
+      }
+      try {
+        const res = await fetch('/signup', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        if (!res.ok) {
+          const err = await res.json();
+          throw new Error(err.error || 'Sign up failed');
         }
-        try {
-          const res = await fetch('/signup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password })
-          });
-          if (!res.ok) {
-            const err = await res.json();
-            throw new Error(err.error || 'Sign up failed');
-          }
-          alert('Account created! Please log in.');
-          window.location.href = '/login.html';
-        } catch (err) {
-          alert('Sign up error: ' + err.message);
-          console.error(err);
-        }
-      });
-    </script>
-  </body>
+        alert('Account created successfully! Please log in.');
+        window.location.href = '/login.html';
+      } catch (err) {
+        alert('Sign up error: ' + err.message);
+        console.error(err);
+      }
+    });
+  </script>
+</body>
 </html>
