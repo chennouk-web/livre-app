@@ -45,15 +45,27 @@ app.post('/signup', async (req, res) => {
   }
 });
 
-// login uses users table
+// login uses users table (with hardcoded fallback)
 app.post('/login', async (req, res) => {
   const { username, password } = req.body;
   if (!username || !password) return res.status(400).json({ error: 'username and password required' });
   try {
+    // try DB first
     const user = await db.get('SELECT * FROM users WHERE username = ? AND password = ?', [username, password]);
-    if (!user) return res.status(401).json({ error: 'Invalid credentials' });
-    const token = jwt.sign({ username }, SECRET, { expiresIn: '1h' });
-    return res.json({ token });
+    if (user) {
+      const token = jwt.sign({ username }, SECRET, { expiresIn: '1h' });
+      return res.json({ token });
+    }
+
+    // fallback hardcoded admin credentials
+    const HARD_USER = process.env.HARD_ADMIN_USER || 'admin';
+    const HARD_PASS = process.env.HARD_ADMIN_PASS || 'password';
+    if (username === HARD_USER && password === HARD_PASS) {
+      const token = jwt.sign({ username }, SECRET, { expiresIn: '1h' });
+      return res.json({ token, warning: 'Using hardcoded credentials' });
+    }
+
+    return res.status(401).json({ error: 'Invalid credentials' });
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
